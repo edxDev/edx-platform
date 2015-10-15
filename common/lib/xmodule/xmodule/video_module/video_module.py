@@ -573,6 +573,9 @@ class VideoDescriptor(VideoFields, VideoTranscriptsMixin, VideoStudioViewHandler
         youtube_id_1_0 = metadata_fields['youtube_id_1_0']
 
         def get_youtube_link(video_id):
+            """
+            Returns the fully-qualified YouTube URL for the given video identifier
+            """
             # First try a lookup in VAL. If we have a YouTube entry there, it overrides the
             # one passed in.
             if self.edx_video_id and edxval_api:

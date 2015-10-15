@@ -1,4 +1,7 @@
 # -*- coding: utf-8 -*-
+"""
+Test cases to cover Accounts-related behaviors of the User API application
+"""
 import datetime
 from copy import deepcopy
 import ddt
@@ -263,6 +266,9 @@ class TestAccountAPI(UserAPITestCase):
         Test the return from GET based on user visibility setting.
         """
         def verify_fields_visible_to_all_users(response):
+            """
+            Confirms that private fields are private, and public/shareable fields are public/shareable
+            """
             if preference_visibility == PRIVATE_VISIBILITY:
                 self._verify_private_account_response(response)
             else:
@@ -290,6 +296,9 @@ class TestAccountAPI(UserAPITestCase):
         as created by the test UserFactory).
         """
         def verify_get_own_information():
+            """
+            Internal helper to perform the actual assertions
+            """
             response = self.send_get(self.client)
             data = response.data
             self.assertEqual(15, len(data))
@@ -419,6 +428,9 @@ class TestAccountAPI(UserAPITestCase):
         client = self.login_client("client", "user")
 
         def verify_error_response(field_name, data):
+            """
+            Internal helper to check the error messages returned
+            """
             self.assertEqual(
                 "This field is not editable via this API", data["field_errors"][field_name]["developer_message"]
             )
@@ -469,12 +481,18 @@ class TestAccountAPI(UserAPITestCase):
         Test the metadata stored when changing the name field.
         """
         def get_name_change_info(expected_entries):
+            """
+            Internal method to encapsulate the retrieval of old names used
+            """
             legacy_profile = UserProfile.objects.get(id=self.user.id)
             name_change_info = legacy_profile.get_meta()["old_names"]
             self.assertEqual(expected_entries, len(name_change_info))
             return name_change_info
 
         def verify_change_info(change_info, old_name, requester, new_name):
+            """
+            Internal method to validate name changes
+            """
             self.assertEqual(3, len(change_info))
             self.assertEqual(old_name, change_info[0])
             self.assertEqual("Name change requested through account API by {}".format(requester), change_info[1])
