@@ -408,6 +408,9 @@ FEATURES = {
 
     # Enable LTI Provider feature.
     'ENABLE_LTI_PROVIDER': False,
+
+    # Enable automatic status emails for ICRV attempts
+    'ENABLE_ICRV_STATUS_EMAILS': False,
 }
 
 # Ignore static asset files on import which match this pattern

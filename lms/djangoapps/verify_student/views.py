@@ -1312,8 +1312,8 @@ def results_callback(request):
     checkpoints = VerificationCheckpoint.objects.filter(photo_verification=attempt).all()
     VerificationStatus.add_status_from_checkpoints(checkpoints=checkpoints, user=attempt.user, status=status)
 
-    # If this is re-verification then send the update email
-    if checkpoints:
+    # Trigger ICRV email only if feature flag for ICRV emails is set
+    if settings.FEATURES.get('ENABLE_ICRV_STATUS_EMAILS', False) and checkpoints:
         user_id = attempt.user.id
         course_key = checkpoints[0].course_id
         related_assessment_location = checkpoints[0].checkpoint_location

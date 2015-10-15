@@ -1712,6 +1712,7 @@ class TestPhotoVerificationResultsCallback(ModuleStoreTestCase):
         self.assertEqual(user_status, 0)
 
     @mock.patch('verify_student.ssencrypt.has_valid_signature', mock.Mock(side_effect=mocked_has_valid_signature))
+    @patch.dict(settings.FEATURES, {'ENABLE_ICRV_STATUS_EMAILS': True})
     def test_pass_in_course_reverify_result(self):
         """
         Test for verification passed.
@@ -1743,6 +1744,7 @@ class TestPhotoVerificationResultsCallback(ModuleStoreTestCase):
 
     @mock.patch('verify_student.views._send_email')
     @mock.patch('verify_student.ssencrypt.has_valid_signature', mock.Mock(side_effect=mocked_has_valid_signature))
+    @patch.dict(settings.FEATURES, {'ENABLE_ICRV_STATUS_EMAILS': True})
     def test_reverification_on_callback(self, mock_send_email):
         """
         Test software secure callback flow for re-verification.
