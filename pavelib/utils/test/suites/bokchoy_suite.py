@@ -19,6 +19,7 @@ __test__ = False  # do not collect
 DEFAULT_NUM_PROCESSORS = 1
 DEFAULT_VERBOSITY = 2
 
+
 class BokChoyTestSuite(TestSuite):
     """
     TestSuite for running Bok Choy tests
@@ -101,19 +102,18 @@ class BokChoyTestSuite(TestSuite):
             raise
 
         if self.num_processors != 1:
-            # Construst "multiprocess" nosetest substring
+            # Construct "multiprocess" nosetest substring
             substring = [
                 "--with-xunitmp --xunitmp-file={}".format(self.xunit_report),
                 "--processes={}".format(self.num_processors),
                 "--no-color --process-timeout=150"
-                ]
+            ]
 
         else:
             substring = [
-            "--with-xunit",
-            "--xunit-file={}".format(self.xunit_report),
-            "--verbosity={}".format(self.verbosity),
-
+                "--with-xunit",
+                "--xunit-file={}".format(self.xunit_report),
+                "--verbosity={}".format(self.verbosity),
             ]
 
         return " ".join(substring)

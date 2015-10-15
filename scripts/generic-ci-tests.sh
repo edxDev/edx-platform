@@ -54,7 +54,7 @@ set -e
 # Note that you will still need to pass a value for 'TEST_SUITE'
 # or else no tests will be executed.
 SHARD=${SHARD:="all"}
-NUMBER_OF_BOKCHOY_THREADS=${NUMBER_OF_BOKCHOY_THREADS:=2}
+NUMBER_OF_BOKCHOY_THREADS=${NUMBER_OF_BOKCHOY_THREADS:=1}
 
 # Clean up previous builds
 git clean -qxfd
