@@ -4,6 +4,7 @@ from django.contrib.auth.models import User
 from django_comment_common.models import (
     Role, FORUM_ROLE_ADMINISTRATOR, FORUM_ROLE_MODERATOR, FORUM_ROLE_STUDENT)
 from django_comment_common.utils import seed_permissions_roles
+from django.core.cache import cache
 from student.models import anonymous_id_for_user, CourseEnrollment, UserProfile
 from util.testing import UrlResetMixin
 from opaque_keys.edx.locations import SlashSeparatedCourseKey
@@ -60,6 +61,28 @@ class AutoAuthEnabledTestCase(UrlResetMixin, TestCase):
         self._auto_auth()
         self._auto_auth()
         self.assertEqual(User.objects.all().count(), 2)
+
+    def test_invalidate_cache_user_profile_country_updated(self):
+
+        self._auto_auth({'username': 'test'})
+        user = User.objects.get(username='test')
+
+        country = 'us'
+        user.profile.country = country
+        user.profile.save()
+
+        cache_key = UserProfile.country_cache_key_name(user.id)
+        self.assertIsNone(cache.get(cache_key))
+
+        cache.set(cache_key, user.profile.country)
+        self.assertEqual(cache.get(cache_key), country)
+
+        country = 'bd'
+        user.profile.country = country
+        user.profile.save()
+
+        self.assertNotEqual(cache.get(cache_key), country)
+        self.assertIsNone(cache.get(cache_key))
 
     def test_create_defined_user(self):
         """
